@@ -28,10 +28,7 @@ end
 b = fn ->
   {left, right} = parse_lines.()
 
-  counts =
-    right
-    |> Enum.group_by(& &1)
-    |> Map.new(fn {key, value} -> {key, Enum.count(value)} end)
+  counts = Enum.frequencies(right)
 
   left
   |> Enum.map(&(&1 * Map.get(counts, &1, 0)))
