@@ -187,16 +187,37 @@ defmodule Day03 do
         end
     end
   end
+
+  # https://topaz.github.io/paste/#XQAAAQDbAgAAAAAAAAAjEkW1XgFn/E5D2tha5mUElmE4Qtzudc/PSz4FC9GlSAH6QUVmojbz+o+1P1d+/OFDNcxQ+TvD0VoJdMK4MfaTxY64WVbF06lJaru8jbyCxxD0YHVX8HZJqx0Ng1S190flsjELgWboC7ZVxZ1Mb0mGbC1HzZzDpXy/iZmg2o249hIp5BHnvsUEcWYEMBMGMbINT8xwMPVM1FnQAXhd7c+AQ06vsPslO1+bZJJaBZaJiXvtyy4x7XO6cwFR1IoY3wQNdxawRMWYj7DPqGB81D9y2/N3aIcIG4U4VaBXUMxAjluzmHbRUZiDk4jVLjeGyhpV+bMdi6XdSsYhgcq835vC5VjAaypv9RXXx+IS3KKKAmZeCj/4ENOT7XnH89XHM0sWFDpOVWQMk4+NyxUkWcOMYp48SG+dMsDHeyC63EiCebH+IK+HjqsZcQO5owZ1SBYBQualIO4PdvCqyhDSjMPIUoPyEmey3+1q4Tr/17EKIA==
+  def get_max_list_python_port_solve(list, k) do
+    # sorted_indices = list |> Enum.with_index() |> IO.inspect() |> Enum.sort(:desc) |> IO.inspect() |> Enum.map(&elem(&1, 1))
+    sorted_indices = Range.new(0, length(list) - 1) |> Enum.sort_by(&Enum.at(list, &1), :desc)
+
+    get_max_list_python_port_joltage(list, sorted_indices, k) |> Integer.undigits()
+  end
+
+  def get_max_list_python_port_joltage(_, _, 0), do: []
+  def get_max_list_python_port_joltage(list, sorted_indices, k) do
+    Enum.reduce_while(sorted_indices, [], fn i, acc ->
+      rest_right = Enum.filter(sorted_indices, fn x -> x > i  end)
+      if length(rest_right) >= k - 1 do
+        {:halt, [Enum.at(list, i) | get_max_list_python_port_joltage(list, rest_right, k - 1)]}
+      else
+        {:cont, acc}
+      end
+    end)
+  end
+
 end
 
 get_max_list = fn list ->
-  Day03.get_max_list({[], list}, 9)
+  Day03.get_max_list_python_port_solve(list, 12)
 end
 
 b = fn ->
   parse.()
   |> Enum.map(&get_max_list.(&1))
-  |> IO.inspect(limit: 1_000_000)
+  # |> IO.inspect(limit: 1_000_000)
   |> Enum.sum()
 end
 
