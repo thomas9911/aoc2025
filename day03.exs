@@ -197,9 +197,11 @@ defmodule Day03 do
   end
 
   def get_max_list_python_port_joltage(_, _, 0), do: []
+
   def get_max_list_python_port_joltage(list, sorted_indices, k) do
     Enum.reduce_while(sorted_indices, [], fn i, acc ->
-      rest_right = Enum.filter(sorted_indices, fn x -> x > i  end)
+      rest_right = Enum.filter(sorted_indices, fn x -> x > i end)
+
       if length(rest_right) >= k - 1 do
         {:halt, [Enum.at(list, i) | get_max_list_python_port_joltage(list, rest_right, k - 1)]}
       else
@@ -207,7 +209,6 @@ defmodule Day03 do
       end
     end)
   end
-
 end
 
 get_max_list = fn list ->
