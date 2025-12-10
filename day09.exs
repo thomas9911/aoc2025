@@ -10,7 +10,7 @@ parse = fn ->
 end
 
 area = fn {x1, y1}, {x2, y2} ->
-  (abs(x1 - x2)+1) * (abs(y1 - y2)+1)
+  (abs(x1 - x2) + 1) * (abs(y1 - y2) + 1)
 end
 
 a = fn ->
@@ -28,7 +28,6 @@ a = fn ->
   |> Enum.sort_by(fn {_, _, area} -> area end, :desc)
   |> Enum.at(0)
   |> elem(2)
-
 end
 
 a.() |> IO.inspect()
